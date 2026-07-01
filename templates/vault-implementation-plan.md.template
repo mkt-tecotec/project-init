@@ -1,0 +1,41 @@
+---
+type: implementation-plan
+tags:
+{{TAGS}}
+status: active
+owner: {{OWNER}}
+project: {{PROJECT_NAME}}
+updated: {{TODAY}}
+last_synced: {{TODAY}}
+---
+
+# {{TODAY}} - {{ONE_LINER}}
+
+## Goal
+
+(What this plan delivers, and how you will know it is done.)
+
+## Context
+
+(Link the notes and decisions this plan builds on: [[00 - Project Overview]] ...)
+
+## Phases
+
+1. (Phase name) - (outcome, key steps)
+2. ...
+
+## Dependencies and critical path
+
+(What must happen before what; where the bottleneck is.)
+
+## Risks and mitigations
+
+(Only risks that would actually change a decision. Not a checklist for its own sake.)
+
+## Verification
+
+(How each phase is verified: commands, Playwright steps, review, metric.)
+
+## Status log
+
+- {{TODAY}}: plan created.

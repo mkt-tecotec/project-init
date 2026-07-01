@@ -1,0 +1,69 @@
+# {{PROJECT_NAME}} - Project Instructions
+
+This file is auto-loaded by Claude Code at the start of every session in this project.
+Read it before answering anything.
+
+## Project identity
+
+{{ONE_LINER}}
+
+Project type: {{PROJECT_TYPE}}.
+
+Current local working folder on this machine:
+
+```text
+{{CODE_PATH}}
+```
+
+If this project is opened from a NAS or synced copy, use the actual current working
+directory reported by the shell instead of the path above.
+
+Repository:
+
+```text
+{{REPO_URL}}
+```
+
+Branch model:
+
+{{BRANCH_MODEL}}
+
+Primary hierarchy:
+
+```text
+{{HIERARCHY}}
+```
+
+## Canonical memory lives in Obsidian
+
+This project's source of truth is the user's Obsidian vault, under:
+
+```text
+{{VAULT_PATH}}
+```
+
+Start here every session: `README.md` in that folder points to the current state and
+the active plan. Prefer the `obsidian` MCP server (`mcp__obsidian__vault_read`) over
+guessing filesystem paths. If the Obsidian MCP server is unavailable, read
+`docs/AGENT_BOOTSTRAP.md` as the portable fallback and tell the user before doing any
+work that depends on project context.
+
+## Hard rules
+
+{{HARD_RULES}}
+
+## Operational defaults
+
+{{OPERATIONAL_DEFAULTS}}
+
+## Before you say "done"
+
+1. Confirm the change matches what the user asked for.
+2. Confirm the vault was updated if a unit of work was completed, or state why no
+   update was needed.
+3. Report briefly: what changed, where in the vault it was logged, what to verify.
+
+## Keep this file and AGENTS.md in sync
+
+`AGENTS.md` carries the same hard rules for non-Claude agents. When a rule changes
+here, change it there too. The two files must never drift apart on rules.

@@ -1,0 +1,53 @@
+---
+type: project
+tags:
+{{TAGS}}
+status: active
+owner: {{OWNER}}
+working_dir: {{CODE_PATH}}
+updated: {{TODAY}}
+last_synced: {{TODAY}}
+---
+
+# {{PROJECT_NAME}} - Project Overview
+
+## One-liner
+
+{{ONE_LINER}}
+
+## Working folder
+
+```text
+{{CODE_PATH}}
+```
+
+Repository: {{REPO_URL}}
+
+## Vì sao làm dự án này
+
+{{WHY}}
+
+## Kỳ vọng outcome / Definition of done
+
+{{OUTCOME}}
+
+## Scope
+
+(In scope: ... / Không làm: list what is explicitly out of scope so the project does
+not drift.)
+
+## Stakeholders and sources
+
+- Stakeholders: {{STAKEHOLDERS}}
+- Brand playbook: {{PLAYBOOK}}
+- Fibery source: (link the Fibery project/entity if applicable)
+
+## Key decisions log
+
+Record decisions with date and the reason, so no future session re-litigates them.
+
+- {{TODAY}}: (decision) - (why)
+
+## Current status
+
+(One paragraph on where things stand. Update this after each unit of work.)

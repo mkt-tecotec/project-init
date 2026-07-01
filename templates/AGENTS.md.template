@@ -1,0 +1,67 @@
+# {{PROJECT_NAME}} - Agent Instructions
+
+This file gives non-Claude agents (Codex and others) the same operating rules as
+`CLAUDE.md`. Read it before touching anything in this project.
+
+## Project identity
+
+{{ONE_LINER}}
+
+Project type: {{PROJECT_TYPE}}.
+
+Current local working directory on this machine:
+
+```text
+{{CODE_PATH}}
+```
+
+If this project is opened from a NAS or synced copy, use the actual current working
+directory reported by the shell instead of the path above.
+
+Repository:
+
+```text
+{{REPO_URL}}
+```
+
+Branch model:
+
+{{BRANCH_MODEL}}
+
+Primary hierarchy:
+
+```text
+{{HIERARCHY}}
+```
+
+## Canonical memory lives in Obsidian
+
+Source of truth is the user's Obsidian vault, under:
+
+```text
+{{VAULT_PATH}}
+```
+
+Read `README.md` in that folder first every session; it points to current state and
+the active plan. Use the `obsidian` MCP server when available and prefer `vault_read`
+over guessing filesystem paths. If Obsidian is unavailable, read
+`docs/AGENT_BOOTSTRAP.md` as the portable fallback and tell the user before doing work
+that depends on project context.
+
+## Hard rules
+
+{{HARD_RULES}}
+
+## Operational defaults
+
+{{OPERATIONAL_DEFAULTS}}
+
+## Before saying done
+
+Confirm: the requested change was implemented; the appropriate verification was run;
+the vault was updated (or explain why not); paths and repo state are still consistent.
+
+## Keep this file and CLAUDE.md in sync
+
+`CLAUDE.md` holds the same hard rules for Claude Code. When a rule changes there,
+change it here too. The two files must never drift apart on rules.

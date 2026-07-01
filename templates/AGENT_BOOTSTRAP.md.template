@@ -1,0 +1,57 @@
+# Agent Bootstrap
+
+This file is a portable fallback for agents that can access the repository but cannot
+access the user's Obsidian vault. When the vault is available it remains the source of
+truth:
+
+```text
+{{VAULT_PATH}}
+```
+
+## Project
+
+{{ONE_LINER}}
+
+Project type: {{PROJECT_TYPE}}.
+
+Current local code path on this machine:
+
+```text
+{{CODE_PATH}}
+```
+
+If opened from a NAS or synced copy, use the actual working directory reported by the
+shell instead of the path above.
+
+Repository:
+
+```text
+{{REPO_URL}}
+```
+
+Branch model:
+
+{{BRANCH_MODEL}}
+
+Primary hierarchy:
+
+```text
+{{HIERARCHY}}
+```
+
+## Current scope
+
+{{OUTCOME}}
+
+## Runtime and commands
+
+{{OPERATIONAL_DEFAULTS}}
+
+## Rules when the vault is unavailable
+
+- Read `CLAUDE.md` (Claude Code) or `AGENTS.md` (other agents) first.
+- Treat the Obsidian vault as the canonical home for implementation plans and
+  handoffs. Do not create standalone plan mirrors in the repo.
+- If you must record something while the vault is down, add a dated note to this file
+  only, tell the user the vault was unavailable, and sync it into Obsidian as soon as
+  the vault is back.
