@@ -1,45 +1,59 @@
 # project-init
 
-Skill cho Claude Code / Cowork: khởi tạo "não" cho dự án mới để không bị rớt não qua các
-phiên làm việc với AI. Dẫn xuất từ convention thực chiến của
-`mkt-tecotec/marcom-workspace` (fibery-clone): CLAUDE.md + AGENTS.md mang các luật cứng,
-Obsidian vault là source of truth.
+Bộ skill cho Claude Code / Cowork giúp dự án làm việc với AI không bị rớt não qua các
+phiên. Dẫn xuất từ convention thực chiến của `mkt-tecotec/marcom-workspace` (fibery-clone):
+CLAUDE.md + AGENTS.md mang các luật cứng, Obsidian vault là source of truth.
+
+Repo chứa hai skill bổ trợ nhau:
+
+- **project-init** (thư mục gốc): chạy đầu tiên khi mở dự án mới. Phỏng vấn mục đích +
+  luật cứng, scaffold CLAUDE.md + AGENTS.md + repo docs, dựng vault brain, rồi sang
+  implementation plan. Đây là 20%: dựng não.
+- **project-checkpoint** (`project-checkpoint/`): chạy cuối mỗi phiên hoặc sau mỗi đơn vị
+  công việc. Ép vòng write-back: cập nhật vault (status, quyết định, gotcha, next action),
+  bump frontmatter, xuất handoff cho phiên sau. Đây là 80%: giữ não sống.
 
 ## Vấn đề: rớt não
 
 Context sống trong chat: cửa sổ đầy thì bị nén, phiên mới thì trắng bảng, quyết định nói
 miệng không ghi ra file nên AI về sau tự mâu thuẫn. Chat là RAM, file là ổ cứng. Cách
 chữa không phải "thêm nhiều thư mục" mà là ba thứ đi cùng nhau: một điểm tái nhập, các
-file context bền, và kỷ luật write-back sau mỗi đơn vị công việc.
-
-## Skill làm gì
-
-Chạy đầu tiên khi mở một dự án mới. Sáu phase: phỏng vấn mục đích, duyệt từng luật cứng,
-dựng brain trong Obsidian, scaffold CLAUDE.md + AGENTS.md + repo docs, nối vòng
-re-entry/write-back, rồi mới sang implementation plan.
+file context bền, và kỷ luật write-back sau mỗi đơn vị công việc. project-init dựng hai
+thứ đầu, project-checkpoint giữ thứ ba.
 
 ## Cài đặt
 
-Claude Code: copy nội dung repo vào `~/.claude/skills/project-init/`, gọi `/project-init`.
-Cowork: dùng nút "Save skill" trên bản đóng gói `.skill`, hoặc Settings > Capabilities.
-Chi tiết trong `INSTALL.md`.
+Claude Code (cả hai skill), symlink để checkpoint được nhận diện như skill riêng và
+`git pull` cập nhật cả hai:
+
+```bash
+git clone https://github.com/mkt-tecotec/project-init.git ~/.claude/skills/project-init
+ln -s ~/.claude/skills/project-init/project-checkpoint ~/.claude/skills/project-checkpoint
+```
+
+Gọi `/project-init` khi mở dự án, `/project-checkpoint` khi đóng phiên. Cowork: thêm từng
+skill qua Settings > Capabilities.
 
 ## Cấu trúc
 
 ```text
-project-init/
+project-init/                (repo root = skill project-init)
 ├── SKILL.md
 ├── INSTALL.md
 ├── README.md
 ├── references/
 │   └── hard-rules-library.md
-└── templates/
-    ├── CLAUDE.md.template
-    ├── AGENTS.md.template
-    ├── AGENT_BOOTSTRAP.md.template
-    ├── vault-README.md.template
-    ├── vault-00-overview.md.template
-    └── vault-implementation-plan.md.template
+├── templates/
+│   ├── CLAUDE.md.template
+│   ├── AGENTS.md.template
+│   ├── AGENT_BOOTSTRAP.md.template
+│   ├── vault-README.md.template
+│   ├── vault-00-overview.md.template
+│   └── vault-implementation-plan.md.template
+└── project-checkpoint/      (skill project-checkpoint)
+    ├── SKILL.md
+    └── references/
+        └── checkpoint-checklist.md
 ```
 
 ## Nguyên tắc cốt lõi
