@@ -1,49 +1,54 @@
 # project-init - cài đặt
 
 Skill khởi tạo "não" cho dự án mới để không bị rớt não qua các phiên làm việc. Chạy đầu
-tiên khi mở một thư mục dự án mới (code hoặc MarCom): phỏng vấn mục đích + luật cứng,
-scaffold CLAUDE.md + AGENTS.md + repo docs, dựng vault brain làm source of truth, rồi mới
-sang implementation plan.
+tiên khi mở một dự án mới (code hoặc MarCom): phát hiện backend nào dùng được rồi hỏi
+chọn, phỏng vấn mục đích và luật cứng, scaffold CLAUDE.md + AGENTS.md + repo docs, dựng
+bộ não dự án, rồi mới sang implementation plan.
 
 ## Cách chạy
 
-Kích hoạt bằng `/project-init`, hoặc nói "khởi tạo dự án" / "bootstrap project" trong thư
-mục dự án. Skill sẽ hỏi lại từng bước trước khi ghi file.
+Kích hoạt bằng `/project-init`, hoặc nói "khởi tạo dự án" trong thư mục dự án. Skill sẽ
+hỏi lại từng bước trước khi ghi bất cứ thứ gì.
 
-## Cài như Claude Code skill (khuyến nghị, dùng được cho mọi dự án)
+Đóng phiên thì gọi `/project-checkpoint`. Bỏ bước này thì phần init trước đó mất tác
+dụng sau vài tuần.
 
-Copy nguyên thư mục `project-init/` vào:
+## Chuẩn bị trước khi chạy
 
-```text
-~/.claude/skills/project-init/
+Skill sẽ tự dò nhưng nên kết nối sẵn:
+
+- **Outline MCP** trỏ tới `doc.tecotec.top` nếu dự án cần người khác đọc được.
+- **Obsidian MCP** nếu anh/chị có vault riêng và muốn dùng làm lớp nháp.
+- **Fibery MCP** nếu muốn link tới project/task đang có.
+
+Không có cái nào cũng chạy được, skill sẽ rơi về phương án repo-only và nói rõ đó là
+phương án yếu nhất.
+
+**Quyền ghi:** nếu chọn KDB, phải có quyền ghi vào collection đích. Không có thì skill
+dừng và báo ai cấp được, chứ không tự ghi sang chỗ khác.
+
+## Cài như Claude Code skill
+
+```bash
+git clone https://github.com/mkt-tecotec/project-init.git ~/.claude/skills/project-init
+ln -s ~/.claude/skills/project-init/project-checkpoint ~/.claude/skills/project-checkpoint
 ```
 
 Dùng cho một dự án cụ thể thì đặt tại `<dự-án>/.claude/skills/project-init/`. Mở lại
 Claude Code để nạp skill. Yêu cầu: có `SKILL.md` ở gốc thư mục skill.
 
-## Cài như Cowork skill
+## Cài như Cowork skill (không cần biết git)
 
-Dùng nút "Save skill" trên file `project-init.skill`, hoặc thêm qua Settings >
-Capabilities. Không thể cắm nóng trong phiên đang chạy; skill có hiệu lực ở phiên sau.
+Tải file `.skill` từ tab Releases của repo rồi bấm "Save skill", hoặc thêm qua
+Settings > Capabilities. Không cắm nóng được trong phiên đang chạy; skill có hiệu lực
+ở phiên sau.
 
-## Nguồn chuẩn
+Hai skill là hai file riêng, cần thêm cả hai.
 
-Nên commit skill này vào repo skills của `mkt-tecotec` để đồng bộ như các skill khác
-(content, martech, mkt-planner...). Sửa ở GitHub, không sửa bản cache local.
+## Sửa skill
 
-## Cấu trúc
+Sửa trên GitHub, không sửa bản cache local (bản cache bị ghi đè khi cập nhật). Mọi
+thay đổi đi qua pull request để cả team thấy được đã đổi gì.
 
-```text
-project-init/
-├── SKILL.md
-├── INSTALL.md
-├── templates/
-│   ├── CLAUDE.md.template
-│   ├── AGENTS.md.template
-│   ├── AGENT_BOOTSTRAP.md.template
-│   ├── vault-README.md.template
-│   ├── vault-00-overview.md.template
-│   └── vault-implementation-plan.md.template
-└── references/
-    └── hard-rules-library.md
-```
+Phòng ban ngoài MarCom: thay `references/tecotec-kdb.md` bằng bản đồ knowledge base của
+mình, giữ nguyên các file còn lại.

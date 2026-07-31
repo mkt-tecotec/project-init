@@ -1,68 +1,81 @@
 # Hard rules library
 
 A menu of reusable "hard rules" to offer during Phase 1 (Q3). Present each one, let the
-user include / edit / skip, then inject the chosen blocks verbatim into `{{HARD_RULES}}`
-in BOTH `CLAUDE.md` and `AGENTS.md`. A hard rule is a named, imperative law with
-specifics, not a vague guideline.
+user include, edit, or skip, then inject the chosen blocks verbatim into
+`{{HARD_RULES}}` in BOTH `CLAUDE.md` and `AGENTS.md`. A hard rule is a named,
+imperative law with specifics, not a vague guideline.
+
+The rules below are written against the brain backend chosen in Phase 0.5. Replace
+`{{BRAIN_NAME}}` (for example "KDB doc.tecotec.top" or "Obsidian vault"),
+`{{BRAIN_ROOT}}` (the collection branch URL or the vault folder path), and
+`{{BRAIN_READ_TOOL}}` (for example `fetch` / `list_collection_documents`, or
+`mcp__obsidian__vault_read`) before writing.
 
 Defaults to always propose: R1, R2, R3, R4, R7. Propose R6 only when there is a Git
-repo. R5 whenever there is a live runtime or DB. Always invite custom rules (R8).
+repo. R5 whenever there is a live runtime or DB. R9, R10, R11 whenever the backend is
+a shared knowledge base. Always invite custom rules (R8).
 
 ---
 
-## R1 - Read the vault before doing real work
+## R1 - Read the brain before doing real work
 
 **Why:** the single biggest cause of rớt não is starting work without loading prior
 context. This forces a re-entry read every session.
 
 ```md
-## Hard rule: read the vault before doing real work
+## Hard rule: read the brain before doing real work
 
-Canonical documentation lives in the Obsidian vault at `{{VAULT_PATH}}`. Before touching
-code, data, or deliverables, read at least `README.md` and `00 - Project Overview.md`.
-Prefer `mcp__obsidian__vault_read` over guessing paths. If Obsidian is unavailable, read
-`docs/AGENT_BOOTSTRAP.md` and tell the user before doing context-dependent work.
+Canonical documentation for this project lives in {{BRAIN_NAME}} at `{{BRAIN_ROOT}}`.
+Before touching code, data, or deliverables, read at least the re-entry page and
+`00 - Project Overview`. Use `{{BRAIN_READ_TOOL}}` rather than guessing at paths or
+URLs. If that backend is unreachable, read `docs/AGENT_BOOTSTRAP.md` and tell the user
+before doing any context-dependent work.
 ```
 
-## R2 - Update the vault after every completed unit of work
+## R2 - Update the brain after every completed unit of work
 
 **Why:** this write-back loop is the part that actually prevents rớt não. Init without
 it goes stale and starts misleading. This is the 80%.
 
 ```md
-## Hard rule: update the vault after every completed unit of work
+## Hard rule: update the brain after every completed unit of work
 
 When you finish a unit of work (a feature, refactor, fix, migration, deliverable, or
-decision), open the relevant note under `{{VAULT_PATH}}` and record what changed, new
-decisions and their reasons, and any new gotcha or verification recipe. Bump the
-`updated:` frontmatter to today. If the change is large, create a new numbered note and
-link it from `README.md`.
+decision), open the relevant document under `{{BRAIN_ROOT}}` and record what changed,
+new decisions and their reasons, and any new gotcha or verification recipe. Update the
+status block or frontmatter date. If the change is large, create a new numbered
+document and link it from the re-entry page.
 ```
 
-## R3 - Vault is the source of truth
+## R3 - One canonical brain
 
-**Why:** prevents parallel versions, the exact failure the user's own rules forbid.
+**Why:** prevents parallel versions, the exact failure mode this skill exists to stop.
 
 ```md
-## Hard rule: vault is the source of truth
+## Hard rule: one canonical brain
 
-The repo `docs/` folder is not canonical memory. Do not mirror vault notes into the
-repo; keep repo docs as pointers or narrow technical references only. Do not save
-project state to the AI memory system. When two sources disagree, the vault wins; fix
-the other immediately rather than letting both live.
+{{BRAIN_NAME}} is canonical for this project. The repo `docs/` folder is not canonical
+memory: keep it to pointers and narrow technical references. Do not save project state
+to the AI memory system. {{SECONDARY_BRAIN_CLAUSE}} When two sources disagree, the
+canonical one wins and the other is corrected immediately rather than left to drift.
 ```
 
-## R4 - Implementation plans live in Obsidian
+If a second backend is in play, `{{SECONDARY_BRAIN_CLAUSE}}` states it explicitly and
+names the one-way sync direction, for example: "The Obsidian vault is a personal
+drafting layer only; content flows from Obsidian into the KDB and never back."
+
+## R4 - Implementation plans live in the brain
 
 **Why:** plans are context, not code; they belong with the brain, dated and findable.
 
 ```md
-## Hard rule: implementation plans live in Obsidian
+## Hard rule: implementation plans live in the brain
 
-All implementation, architecture, and phase plans go to `{{VAULT_PATH}}/Implementation
-Plans/`, named `YYYY-MM-DD - Short Topic.md`. The repo may hold brief pointers only. If
-Obsidian is down, record a temporary dated fallback in `docs/AGENT_BOOTSTRAP.md`, tell
-the user, and sync into Obsidian as soon as the vault is available.
+All implementation, architecture, and phase plans go under `{{BRAIN_ROOT}}` in an
+`Implementation Plans` container, named `YYYY-MM-DD - Short Topic`. The repo may hold
+brief pointers only. If the brain is unreachable, record a temporary dated fallback in
+`docs/AGENT_BOOTSTRAP.md`, tell the user, and sync it into the brain as soon as the
+backend is available.
 ```
 
 ## R5 - Keep paths and runtime state consistent
@@ -98,8 +111,8 @@ from the tag. No push without a matching CHANGELOG entry, tag, and published rel
 ## Hard rule: verify before you say done
 
 Before claiming done: confirm the change matches the request; run the appropriate
-verification (typecheck/build/test, Playwright, browser check, or a metric); confirm the
-vault was updated or state why not.
+verification (typecheck/build/test, Playwright, browser check, or a metric); confirm
+the brain was updated or state why not.
 ```
 
 ## R8 - Custom rules
@@ -108,3 +121,48 @@ Capture any project-specific hard rule the user states, verbatim, in the same
 `## Hard rule: <name>` format. Examples that often come up: language and formatting
 constraints (full Vietnamese diacritics, no em dash), review gates before publishing,
 brand-approval steps, data-privacy handling.
+
+## R9 - Respect the permission zones of the knowledge base
+
+**Why:** in a shared KDB, the collection you write into decides who can read it. A
+misplaced budget or a share link on the wrong branch cannot be undone by editing.
+
+```md
+## Hard rule: respect the permission zones of the knowledge base
+
+Before creating any document, decide its zone, not just its topic. Money, proposals to
+leadership, HR, and candid commentary about people go to the restricted collection,
+even when they belong to a project documented elsewhere. Public share links are enabled
+only in the designated external-sharing collection, never on a branch, because sharing
+cascades to every child document. Creating through the API does not apply restrictive
+permissions automatically: after writing anything sensitive, tell the user to verify
+the permission in the UI. If a write to the correct collection fails, stop and say so;
+never fall back to a different collection.
+```
+
+## R10 - The knowledge base holds knowledge, not operational state
+
+**Why:** copied task state goes stale within days and then actively misleads, which is
+worse than an empty page.
+
+```md
+## Hard rule: the knowledge base holds knowledge, not operational state
+
+Tasks, progress percentages, deadlines, and assignees live in the operational system
+({{OPS_SYSTEM}}). Do not mirror them into the knowledge base; link to the source
+instead. The knowledge base carries purpose, decisions, gotchas, and documents with
+long-term value.
+```
+
+## R11 - Decisions are append-only
+
+**Why:** an overwritten decision destroys the reason trail, and the next session
+re-litigates a question that was already settled.
+
+```md
+## Hard rule: decisions are append-only
+
+Never edit or delete a recorded decision. To reverse one, add a new dated decision that
+states what it supersedes and why, and link back to the original. Decision documents
+are named `Quyết định: <việc> (YYYY-MM-DD)`.
+```

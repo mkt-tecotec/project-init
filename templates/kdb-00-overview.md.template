@@ -1,0 +1,54 @@
+TITLE: 00 - Project Overview
+COLLECTION: {{BRAIN_COLLECTION}}
+PARENT: {{PROJECT_NAME}}
+
+The lines above are instructions for the agent creating this document, not body
+content. Delete this header block before writing. The body must not begin with an H1.
+
+---
+
+> **Trạng thái:** đang chạy | **Owner:** {{OWNER}} | **Cập nhật:** {{TODAY}}
+
+## Một câu
+
+{{ONE_LINER}}
+
+## Thư mục làm việc
+
+```text
+{{CODE_PATH}}
+```
+
+Repository: {{REPO_URL}}
+
+## Vì sao làm dự án này
+
+{{WHY}}
+
+## Kỳ vọng outcome / Definition of done
+
+{{OUTCOME}}
+
+## Phạm vi
+
+Làm: ...
+
+Không làm: (ghi rõ những gì nằm ngoài phạm vi để dự án không trôi)
+
+## Stakeholder và nguồn
+
+- Stakeholder: {{STAKEHOLDERS}}
+- Brand playbook: {{PLAYBOOK}}
+- Fibery: (link tới project hoặc task, không copy số liệu sang đây)
+
+## Nhật ký quyết định
+
+Ghi quyết định kèm ngày và lý do, để phiên sau không bàn lại việc đã chốt.
+Append-only: không sửa quyết định cũ, muốn đảo thì thêm dòng mới nói rõ thay thế
+dòng nào và vì sao.
+
+- {{TODAY}}: (quyết định) - (lý do)
+
+## Hiện trạng
+
+(Một đoạn về tình hình hiện tại. Cập nhật sau mỗi đơn vị công việc.)

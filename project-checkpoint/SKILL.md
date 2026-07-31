@@ -3,11 +3,12 @@ name: project-checkpoint
 description: >-
   Close out a work session by forcing the write-back loop so the project's brain
   never goes stale (the 80% that prevents "rớt não"). Run at the END of a unit of
-  work or session: gather what actually changed, update the Obsidian vault (status,
-  decisions, gotchas, next action), bump frontmatter, and emit an accurate handoff
-  for the next cold session. Companion to project-init. Triggers: "checkpoint",
-  "đóng phiên", "close out", "cập nhật vault", "project-checkpoint", "handoff",
-  "kết thúc phiên", "ghi lại tiến độ".
+  work or session: gather what actually changed, update the project brain (status,
+  decisions, gotchas, next action) in whichever backend is canonical for that
+  project (the KDB on Outline, an Obsidian vault, or the repo), and emit an accurate
+  handoff for the next cold session. Companion to project-init. Triggers:
+  "checkpoint", "đóng phiên", "close out", "cập nhật KDB", "cập nhật vault",
+  "project-checkpoint", "handoff", "kết thúc phiên", "ghi lại tiến độ".
 ---
 
 # project-checkpoint
@@ -19,7 +20,7 @@ re-entry point stays accurate and the next session does not drift.
 
 `project-init` builds the brain. That is 20% of the value. This skill keeps it alive,
 the other 80%. Rớt não returns the moment the brain stops matching reality: a stale
-note misleads the next session worse than no note at all. This skill runs the
+document misleads the next session worse than no document at all. This skill runs the
 write-back loop that `project-init` sets up as a hard rule.
 
 ## When to use
@@ -37,17 +38,28 @@ stop. Noise erodes the signal the brain depends on.
 
 - **Durable delta, not a dump.** Record only what a future session must know.
 - **One accurate next action.** The single most important output of every checkpoint.
-- **Vault is the source of truth.** Never mirror into the repo or the AI memory system.
+- **Write to the canonical backend.** Whichever one `CLAUDE.md` names. If a secondary
+  drafting layer was used this session, the checkpoint is not done until the canonical
+  side reflects it.
+- **Permission before placement.** New budget, proposal, or HR content goes to the
+  restricted collection, never appended into a team-wide project branch for
+  convenience.
+- **Knowledge, not operational state.** Do not copy task lists, percentages, or
+  deadlines out of the operational system into the brain. Link instead.
 - **Honest and idempotent.** Only record what actually happened; verify before writing.
   Running twice must not double-write.
 - **Formatting.** Full Vietnamese diacritics; never the em dash character.
 
-## Phase 0 - Locate the brain
+## Phase 0 - Locate the brain and its backend
 
-Determine the active project and its vault folder from the `CLAUDE.md` "Canonical
-memory" pointer (or ask). Read the vault `README.md` and the `00`/`03` notes first so
-updates append to truth rather than overwrite it. If Obsidian is unavailable, write to
-`docs/AGENT_BOOTSTRAP.md` and tell the user, then sync to the vault once it is back.
+Read the "Brain backend" block in `CLAUDE.md` to learn which backend is canonical and
+where the project's root document or folder is. If that block is missing, the project
+predates the multi-backend convention: ask which backend is canonical, then add the
+block to `CLAUDE.md` and `AGENTS.md` before continuing.
+
+Read the re-entry page and the `00` / `03` documents first so updates append to truth
+rather than overwrite it. If the backend is unreachable, write to
+`docs/AGENT_BOOTSTRAP.md`, tell the user, and sync once it is back.
 
 ## Phase 1 - Gather the delta
 
@@ -58,19 +70,25 @@ updates append to truth rather than overwrite it. If Obsidian is unavailable, wr
 - Capture five things: what changed, decisions and their reasons, new gotchas, new
   verification recipes, and the single next action.
 
-## Phase 2 - Write back to the vault (the loop)
+## Phase 2 - Write back to the brain (the loop)
 
-In the project's vault folder, update:
+In the project's brain, update:
 
 1. `03 - Implementation Status` (or the `00` current-status paragraph): rewrite the
    current state; set the next action explicitly.
-2. Key decisions log: append dated decisions with their reason. Never silently drop a
-   prior decision; if reversing one, record the reversal and why.
+2. Key decisions log: append dated decisions with their reason. Never silently drop or
+   edit a prior decision; if reversing one, add a new dated entry that names what it
+   supersedes and why.
 3. Gotchas and verification: append anything a future session would trip on.
-4. `README` re-entry block: update Status, Next action, and Active plan.
+4. Re-entry page: update Status, Next action, and Active plan.
 5. Active implementation plan: append to its Status log; flip a phase's status if it
    closed.
-6. Frontmatter: bump `updated` and `last_synced` to today on every note touched.
+6. Date stamp: on Outline, update the status block at the top of each document touched.
+   On Obsidian, bump `updated` and `last_synced` frontmatter to today.
+
+If a decision this session is significant beyond the project, also create a dated
+decision document in the organisation's decision collection and link it from the
+project.
 
 ## Phase 3 - Release gate (code + tag/changelog rule only)
 
@@ -80,16 +98,22 @@ publish automatically. Surface the exact commands for the user to run.
 
 ## Phase 4 - Guardrails
 
-- No parallel versions: repo docs stay pointers; the vault holds canonical content.
+- No parallel versions: repo docs stay pointers; the canonical brain holds content.
+- If a secondary drafting layer was used, it synced one way into the canonical brain.
+- Nothing sensitive was appended into a team-wide collection; no share link was enabled
+  outside the designated external-sharing collection.
+- No operational state copied out of the ops system into the brain.
 - Leave `CLAUDE.md` / `AGENTS.md` untouched unless a hard rule actually changed, in
   which case edit both to keep them mirror-identical.
-- Frontmatter valid; full diacritics; no em dash.
+- Outline documents carry no YAML frontmatter and no leading H1; vault frontmatter is
+  valid. Full diacritics; no em dash.
 
 ## Phase 5 - Emit the handoff
 
 Print a short handoff (under about eight lines): what changed, where it was logged
-(note paths), and the one next action. This is what the next session, `project-init`
-update mode, or a teammate reads first. If nothing changed, say so plainly.
+(document URLs or note paths), and the one next action. This is what the next session,
+`project-init` update mode, or a teammate reads first. If nothing changed, say so
+plainly.
 
 ## Reference
 
