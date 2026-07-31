@@ -1,11 +1,10 @@
 # Agent Bootstrap
 
-This file is a portable fallback for agents that can access the repository but cannot
-access the user's Obsidian vault. When the vault is available it remains the source of
-truth:
+This file is a portable fallback for agents that can reach the repository but not the
+project's canonical brain. When the brain is reachable it remains the source of truth:
 
 ```text
-{{VAULT_PATH}}
+{{BRAIN_NAME}}: {{BRAIN_ROOT}}
 ```
 
 ## Project
@@ -47,11 +46,13 @@ Primary hierarchy:
 
 {{OPERATIONAL_DEFAULTS}}
 
-## Rules when the vault is unavailable
+## Rules when the brain is unavailable
 
 - Read `CLAUDE.md` (Claude Code) or `AGENTS.md` (other agents) first.
-- Treat the Obsidian vault as the canonical home for implementation plans and
-  handoffs. Do not create standalone plan mirrors in the repo.
-- If you must record something while the vault is down, add a dated note to this file
-  only, tell the user the vault was unavailable, and sync it into Obsidian as soon as
-  the vault is back.
+- The canonical brain remains the home for implementation plans and handoffs. Do not
+  create standalone plan mirrors in the repo.
+- If you must record something while the brain is down, add a dated note to this file
+  only, tell the user the brain was unavailable, and sync it into the brain as soon as
+  the backend is back.
+- Never work around a permission failure by writing somewhere else. If a write to the
+  intended destination is refused, stop and report it.

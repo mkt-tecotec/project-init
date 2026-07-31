@@ -34,19 +34,24 @@ Primary hierarchy:
 {{HIERARCHY}}
 ```
 
-## Canonical memory lives in Obsidian
+## Brain backend
 
-Source of truth is the user's Obsidian vault, under:
+Canonical memory for this project lives in **{{BRAIN_NAME}}**, at:
 
 ```text
-{{VAULT_PATH}}
+{{BRAIN_ROOT}}
 ```
 
-Read `README.md` in that folder first every session; it points to current state and
-the active plan. Use the `obsidian` MCP server when available and prefer `vault_read`
-over guessing filesystem paths. If Obsidian is unavailable, read
-`docs/AGENT_BOOTSTRAP.md` as the portable fallback and tell the user before doing work
-that depends on project context.
+Read the re-entry page above first every session; it points to current state and the
+active plan. Use `{{BRAIN_READ_TOOL}}` rather than guessing at paths or URLs.
+
+{{SECONDARY_BRAIN_CLAUSE}}
+
+If that backend is unavailable, read `docs/AGENT_BOOTSTRAP.md` as the portable fallback
+and tell the user before doing work that depends on project context.
+
+This choice was made deliberately at project init. Do not switch backends casually; a
+switch is a decision to log, not a preference to drift on.
 
 ## Hard rules
 
@@ -59,7 +64,7 @@ that depends on project context.
 ## Before saying done
 
 Confirm: the requested change was implemented; the appropriate verification was run;
-the vault was updated (or explain why not); paths and repo state are still consistent.
+the brain was updated (or explain why not); paths and repo state are still consistent.
 
 ## Keep this file and CLAUDE.md in sync
 

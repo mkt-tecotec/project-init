@@ -34,19 +34,25 @@ Primary hierarchy:
 {{HIERARCHY}}
 ```
 
-## Canonical memory lives in Obsidian
+## Brain backend
 
-This project's source of truth is the user's Obsidian vault, under:
+Canonical memory for this project lives in **{{BRAIN_NAME}}**, at:
 
 ```text
-{{VAULT_PATH}}
+{{BRAIN_ROOT}}
 ```
 
-Start here every session: `README.md` in that folder points to the current state and
-the active plan. Prefer the `obsidian` MCP server (`mcp__obsidian__vault_read`) over
-guessing filesystem paths. If the Obsidian MCP server is unavailable, read
-`docs/AGENT_BOOTSTRAP.md` as the portable fallback and tell the user before doing any
-work that depends on project context.
+Start here every session: the re-entry page above states the current state, the next
+action, and the active plan. Read it with `{{BRAIN_READ_TOOL}}` rather than guessing at
+paths or URLs.
+
+{{SECONDARY_BRAIN_CLAUSE}}
+
+If that backend is unavailable, read `docs/AGENT_BOOTSTRAP.md` as the portable fallback
+and tell the user before doing any work that depends on project context.
+
+This choice was made deliberately at project init. Do not switch backends casually; a
+switch is a decision to log, not a preference to drift on.
 
 ## Hard rules
 
@@ -59,9 +65,9 @@ work that depends on project context.
 ## Before you say "done"
 
 1. Confirm the change matches what the user asked for.
-2. Confirm the vault was updated if a unit of work was completed, or state why no
+2. Confirm the brain was updated if a unit of work was completed, or state why no
    update was needed.
-3. Report briefly: what changed, where in the vault it was logged, what to verify.
+3. Report briefly: what changed, where in the brain it was logged, what to verify.
 
 ## Keep this file and AGENTS.md in sync
 

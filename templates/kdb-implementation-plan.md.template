@@ -1,0 +1,39 @@
+TITLE: {{TODAY}} - {{ONE_LINER}}
+COLLECTION: {{BRAIN_COLLECTION}}
+PARENT: Implementation Plans (under {{PROJECT_NAME}})
+
+The lines above are instructions for the agent creating this document, not body
+content. Delete this header block before writing. The body must not begin with an H1.
+
+---
+
+> **Trạng thái:** đang chạy | **Owner:** {{OWNER}} | **Cập nhật:** {{TODAY}}
+
+## Mục tiêu
+
+(Kế hoạch này giao ra cái gì, và căn cứ nào để biết là xong.)
+
+## Bối cảnh
+
+(Link tới các tài liệu và quyết định mà kế hoạch này dựa trên, bằng URL đầy đủ.)
+
+## Các pha
+
+1. (Tên pha) - (kết quả, bước chính)
+2. ...
+
+## Phụ thuộc và đường găng
+
+(Việc nào phải xong trước việc nào; nút thắt nằm ở đâu.)
+
+## Rủi ro và cách chặn
+
+(Chỉ những rủi ro thực sự làm đổi quyết định. Không liệt kê cho đủ.)
+
+## Nghiệm thu
+
+(Mỗi pha kiểm chứng bằng cách nào: lệnh, Playwright, review, hoặc một chỉ số.)
+
+## Nhật ký trạng thái
+
+- {{TODAY}}: tạo kế hoạch.
