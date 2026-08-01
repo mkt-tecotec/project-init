@@ -14,8 +14,7 @@ tại", "việc tiếp theo" are what make this page findable at all.
 
 ---
 
-> **Trạng thái:** đang chạy | **Owner:** {{OWNER}} | **Cập nhật lần cuối:** {{TODAY}}
-> **Revision khi checkpoint:** {{REVISION}} | **Thư mục làm việc:** `{{CODE_PATH}}` | **Repo:** {{REPO_URL}}
+> **Trạng thái:** đang chạy | **Owner:** {{OWNER}} | **Cập nhật lần cuối:** {{TODAY}} | **Revision khi checkpoint:** {{REVISION}} | **Thư mục làm việc:** `{{CODE_PATH}}` | **Repo:** {{REPO_URL}}
 
 Đây là **điểm tái nhập** của dự án {{PROJECT_NAME}}, nguồn chính thức để bắt đầu.
 Mọi phiên làm việc, người hay AI, đọc trang này trước khi bắt tay vào việc. Kết thúc

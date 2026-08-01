@@ -236,8 +236,11 @@ Vietnamese content: full diacritics, and never the em dash character.
 - The hard rules exist in exactly one file. `AGENTS.md` holds them; `CLAUDE.md` imports
   it with `@AGENTS.md`. There is no second copy to drift.
 - The re-entry page contains the Vietnamese phrases "điểm tái nhập", "trạng thái hiện
-  tại" and "việc tiếp theo", and fits in one screen. Search the brain for one of those
-  phrases and confirm the page comes back.
+  tại" and "việc tiếp theo", and fits in one screen. Verify it by searching the brain for
+  **"điểm tái nhập"** and confirming the page comes back. Use that exact phrase, not a
+  longer sentence: Outline search is token-based, so a multi-word query matches each word
+  separately and buries the page under noise. The distinctive phrase is the reliable
+  handle.
 - Every document was created in the collection or folder the user confirmed in Q5.
   Nothing sensitive landed in a team-wide collection. No share link was enabled outside
   the designated external-sharing collection.
