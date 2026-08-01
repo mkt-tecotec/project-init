@@ -8,10 +8,15 @@ description: >-
   project (the KDB on Outline, an Obsidian vault, or the repo), and emit an accurate
   handoff for the next cold session. Companion to project-init. Triggers:
   "checkpoint", "đóng phiên", "close out", "cập nhật KDB", "cập nhật vault",
-  "project-checkpoint", "handoff", "kết thúc phiên", "ghi lại tiến độ".
+  "project-checkpoint", "handoff", "kết thúc phiên", "ghi lại tiến độ", "xong rồi",
+  "hoàn thành", "chốt lại", "bàn giao", "sắp push", "nghỉ đây", "mai làm tiếp",
+  "tạm dừng ở đây", "done for today".
 ---
 
 # project-checkpoint
+
+**Version 0.3.0.** Say this version number in your first line of output when the skill
+runs. Claude Code installs update themselves; a Cowork install does not.
 
 Close a work session by writing the real delta back into the project's brain, so the
 re-entry point stays accurate and the next session does not drift.
@@ -52,14 +57,24 @@ stop. Noise erodes the signal the brain depends on.
 
 ## Phase 0 - Locate the brain and its backend
 
-Read the "Brain backend" block in `CLAUDE.md` to learn which backend is canonical and
-where the project's root document or folder is. If that block is missing, the project
-predates the multi-backend convention: ask which backend is canonical, then add the
-block to `CLAUDE.md` and `AGENTS.md` before continuing.
+Read the "Brain backend" block in `AGENTS.md` to learn which backend is canonical and
+where the project's root document or folder is. Claude Code reaches it through the
+`@AGENTS.md` import in `CLAUDE.md`; on Cowork, open `AGENTS.md` directly; a project with
+no repo at all has no such file, so ask. If the block is missing, the project predates
+the multi-backend convention: ask which backend is canonical, then add the block to
+`AGENTS.md` before continuing.
 
 Read the re-entry page and the `00` / `03` documents first so updates append to truth
 rather than overwrite it. If the backend is unreachable, write to
 `docs/AGENT_BOOTSTRAP.md`, tell the user, and sync once it is back.
+
+Then read the staleness signal for this backend before writing anything, following
+"Staleness signal" in `../project-init/references/brain-backends.md`: on Outline
+`list_documents(collectionId)` for `updatedAt`, `updatedBy.name` and `revision`; on
+Obsidian the `updated` and `last_synced` frontmatter; in a repo `git log -1`. Compare
+`revision` against the value recorded in the status block at the last checkpoint and say
+the delta out loud. If someone else edited the brain since then, read their change
+before appending, so you do not quietly overwrite a decision you never saw.
 
 ## Phase 1 - Gather the delta
 
@@ -103,8 +118,10 @@ publish automatically. Surface the exact commands for the user to run.
 - Nothing sensitive was appended into a team-wide collection; no share link was enabled
   outside the designated external-sharing collection.
 - No operational state copied out of the ops system into the brain.
-- Leave `CLAUDE.md` / `AGENTS.md` untouched unless a hard rule actually changed, in
-  which case edit both to keep them mirror-identical.
+- Leave `AGENTS.md` untouched unless a hard rule actually changed, in which case edit it
+  there and only there. `CLAUDE.md` imports it with `@AGENTS.md` and needs no parallel
+  edit. If you find a rule duplicated in `CLAUDE.md`, delete the duplicate rather than
+  syncing it.
 - Outline documents carry no YAML frontmatter and no leading H1; vault frontmatter is
   valid. Full diacritics; no em dash.
 

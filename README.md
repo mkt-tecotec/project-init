@@ -1,18 +1,17 @@
 # project-init
 
 Bộ skill cho Claude Code / Cowork giúp dự án làm việc với AI không bị rớt não qua các
-phiên. Dẫn xuất từ convention thực chiến của `mkt-tecotec/marcom-workspace`:
-CLAUDE.md + AGENTS.md mang các luật cứng, một bộ não duy nhất làm source of truth.
+phiên. Dẫn xuất từ convention thực chiến của `mkt-tecotec/marcom-workspace`: `AGENTS.md`
+mang các luật cứng, một bộ não duy nhất làm source of truth.
 
 Repo chứa hai skill bổ trợ nhau:
 
-- **project-init** (thư mục gốc): chạy đầu tiên khi mở dự án mới. Phát hiện backend
-  nào dùng được rồi hỏi chọn, phỏng vấn mục đích và luật cứng, scaffold CLAUDE.md +
-  AGENTS.md + repo docs, dựng bộ não dự án, rồi sang implementation plan. Đây là 20%:
-  dựng não.
-- **project-checkpoint** (`project-checkpoint/`): chạy cuối mỗi phiên hoặc sau mỗi đơn vị
-  công việc. Ép vòng write-back: cập nhật bộ não (status, quyết định, gotcha, next
-  action), xuất handoff cho phiên sau. Đây là 80%: giữ não sống.
+- **project-init**: chạy đầu tiên khi mở dự án mới. Phát hiện backend nào dùng được rồi
+  hỏi chọn, phỏng vấn mục đích và luật cứng, scaffold `AGENTS.md` + repo docs, dựng bộ
+  não dự án, rồi sang implementation plan. Đây là 20%: dựng não.
+- **project-checkpoint**: chạy cuối mỗi phiên hoặc sau mỗi đơn vị công việc. Ép vòng
+  write-back: cập nhật bộ não (status, quyết định, gotcha, next action), xuất handoff cho
+  phiên sau. Đây là 80%: giữ não sống.
 
 ## Vấn đề: rớt não
 
@@ -21,6 +20,34 @@ miệng không ghi ra file nên AI về sau tự mâu thuẫn. Chat là RAM, fil
 chữa không phải "thêm nhiều thư mục" mà là ba thứ đi cùng nhau: một điểm tái nhập, các
 tài liệu context bền, và kỷ luật write-back sau mỗi đơn vị công việc. project-init dựng
 hai thứ đầu, project-checkpoint giữ thứ ba.
+
+## Kỷ luật đặt ở đâu để không phụ thuộc trí nhớ
+
+Vòng write-back mà phải nhớ mới chạy thì sẽ hỏng đúng lúc cần nhất. Nên nó được đặt ở ba
+chỗ chạy được trên cả Cowork lẫn Claude Code:
+
+1. **Trong skill.** Đọc tín hiệu stale và chạy cold-start test là bước bắt buộc trong
+   SKILL.md, không phải lời khuyên.
+2. **Trong chính tài liệu.** Điểm tái nhập mang sẵn khối Trạng thái và dòng nghi thức
+   "kết thúc phiên thì chạy `/project-checkpoint`". Trên Cowork, tài liệu chính là cái hook.
+3. **Trong trigger của skill.** `description` của project-checkpoint bắt cả những câu nói
+   tự nhiên khi xong việc ("xong rồi", "chốt lại", "mai làm tiếp").
+
+Riêng Claude Code có thêm một lớp cứng: hook `SessionStart` nạp điểm tái nhập vào context
+lúc mở phiên, hook `Stop` chặn đóng phiên khi có delta chưa ghi, hook `PreCompact` giữ
+trạng thái qua lần nén. Cowork không có hook, nên đó là lớp bổ sung chứ không phải nền
+móng.
+
+## Nghiệm thu: cold-start test
+
+Guardrail hình thức (frontmatter, đủ dấu, đặt đúng collection) không chứng minh được bộ
+não hoạt động. Phép thử chứng minh được là:
+
+> Mở một phiên mới không biết gì về cuộc trò chuyện trước. Đưa cho nó đúng một thứ: trang
+> điểm tái nhập. Hỏi: **"việc tiếp theo là gì, và tại sao lại là nó?"**
+
+Trả lời cụ thể và khớp thực tế thì bộ não đạt. Trả lời mơ hồ hoặc phải đoán thì bộ não
+hỏng, dù mọi checklist đều xanh. Đây là tiêu chí nghiệm thu của cả bộ skill.
 
 ## Bộ não đặt ở đâu: skill hỏi, không tự quyết
 
@@ -38,9 +65,10 @@ skill này sinh ra để chặn.
 
 ## Dùng ngoài phòng MarCom
 
-Phần riêng của TECOTEC MarCom nằm gọn trong một file: `references/tecotec-kdb.md`
-(bản đồ collection, ba vùng quyền, quy ước đặt tên, ranh giới KDB với Fibery). Phòng
-ban có knowledge base khác chỉ cần thay file đó, phần còn lại giữ nguyên.
+Phần riêng của TECOTEC MarCom nằm gọn trong một file:
+`plugin/skills/project-init/references/tecotec-kdb.md` (bản đồ collection, ba vùng quyền,
+quy ước đặt tên, ranh giới KDB với Fibery). Phòng ban có knowledge base khác chỉ cần thay
+file đó, phần còn lại giữ nguyên.
 
 Lưu ý về quyền: skill kiểm tra quyền ghi trước khi scaffold. Ghi hỏng thì dừng và báo,
 không tự chuyển sang collection khác, vì chỗ chuyển sang thường là chỗ nội dung không
@@ -48,51 +76,57 @@ không tự chuyển sang collection khác, vì chỗ chuyển sang thường l�
 
 ## Cài đặt
 
-Claude Code (cả hai skill), symlink để checkpoint được nhận diện như skill riêng và
-`git pull` cập nhật cả hai:
+Chi tiết từng bề mặt nằm trong `INSTALL.md`. Tóm tắt:
+
+Claude Code, cài một lần rồi tự cập nhật:
 
 ```bash
-git clone https://github.com/mkt-tecotec/project-init.git ~/.claude/skills/project-init
-ln -s ~/.claude/skills/project-init/project-checkpoint ~/.claude/skills/project-checkpoint
+/plugin marketplace add mkt-tecotec/project-init
+/plugin install project-brain@mkt-tecotec
 ```
 
-Gọi `/project-init` khi mở dự án, `/project-checkpoint` khi đóng phiên.
-
-Cowork (không cần biết git): xem `INSTALL.md`.
+Cowork: tải ZIP ở
+[Releases](https://github.com/mkt-tecotec/project-init/releases), rồi Customize > Skills
+> upload. Cowork không tự cập nhật, mỗi bản mới phải tải lại.
 
 ## Cấu trúc
 
 ```text
-project-init/                (repo root = skill project-init)
-├── SKILL.md
-├── INSTALL.md
+project-init/                        (repo = marketplace mkt-tecotec)
+├── .claude-plugin/
+│   └── marketplace.json
+├── plugin/                          (plugin project-brain)
+│   ├── .claude-plugin/plugin.json
+│   ├── hooks/hooks.json             (SessionStart, PreCompact, Stop)
+│   ├── scripts/brain-status.sh
+│   └── skills/
+│       ├── project-init/
+│       │   ├── SKILL.md
+│       │   ├── references/
+│       │   │   ├── brain-backends.md    (detect + hỏi chọn backend + tín hiệu stale)
+│       │   │   ├── tecotec-kdb.md       (preset TECOTEC, thay file này khi dùng nơi khác)
+│       │   │   └── hard-rules-library.md
+│       │   └── templates/
+│       │       ├── AGENTS.md.template        (nguồn duy nhất của luật cứng)
+│       │       ├── CLAUDE.md.template        (chỉ @AGENTS.md + phần riêng Claude Code)
+│       │       ├── AGENT_BOOTSTRAP.md.template
+│       │       ├── settings.json.template
+│       │       ├── kdb-*.template
+│       │       └── vault-*.template
+│       └── project-checkpoint/
+│           ├── SKILL.md
+│           └── references/checkpoint-checklist.md
 ├── README.md
-├── CHANGELOG.md
-├── references/
-│   ├── brain-backends.md        (lõi generic: detect + hỏi chọn backend)
-│   ├── tecotec-kdb.md           (preset TECOTEC, thay file này khi dùng nơi khác)
-│   └── hard-rules-library.md
-├── templates/
-│   ├── CLAUDE.md.template
-│   ├── AGENTS.md.template
-│   ├── AGENT_BOOTSTRAP.md.template
-│   ├── kdb-README.md.template
-│   ├── kdb-00-overview.md.template
-│   ├── kdb-implementation-plan.md.template
-│   ├── vault-README.md.template
-│   ├── vault-00-overview.md.template
-│   └── vault-implementation-plan.md.template
-└── project-checkpoint/      (skill project-checkpoint)
-    ├── SKILL.md
-    └── references/
-        └── checkpoint-checklist.md
+├── INSTALL.md
+└── CHANGELOG.md
 ```
 
 ## Nguyên tắc cốt lõi
 
-Một bộ não canonical, chọn có ý thức từng dự án và ghi vào luật cứng. Integrate chứ
-không tạo parallel versions. Trong knowledge base dùng chung, quyền quyết định chỗ đặt,
-không phải chủ đề. KDB giữ kiến thức, Fibery giữ số liệu vận hành, không copy qua
-lại. Scaffold tối thiểu, không empty-folder graveyard. CLAUDE.md và AGENTS.md mirror
-luật cứng cho đa agent. Idempotent: phát hiện não cũ thì update, không đè. Luôn có một
-điểm tái nhập cho phiên nguội.
+Một bộ não canonical, chọn có ý thức từng dự án và ghi vào luật cứng. Integrate chứ không
+tạo parallel versions. Trong knowledge base dùng chung, quyền quyết định chỗ đặt, không
+phải chủ đề. KDB giữ kiến thức, Fibery giữ số liệu vận hành, không copy qua lại. Scaffold
+tối thiểu, không empty-folder graveyard. Luật cứng nằm ở đúng một file `AGENTS.md`,
+`CLAUDE.md` chỉ import nó. Idempotent: phát hiện não cũ thì update, không đè. Đọc tín
+hiệu stale trước khi tin bộ não. Luôn có một điểm tái nhập cho phiên nguội, và nó phải
+qua được cold-start test.

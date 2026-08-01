@@ -1,0 +1,25 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "mkt-tecotec",
+  "owner": {
+    "name": "TECOTEC MarCom"
+  },
+  "metadata": {
+    "description": "Skill chống rớt não cho dự án làm việc với AI: dựng bộ não dự án, rồi ép vòng write-back để bộ não không cũ đi.",
+    "version": "0.3.0"
+  },
+  "plugins": [
+    {
+      "name": "project-brain",
+      "description": "project-init dựng bộ não dự án (AGENTS.md + điểm tái nhập trong KDB hoặc Obsidian), project-checkpoint ép vòng write-back cuối phiên. Kèm hook nạp điểm tái nhập lúc mở phiên và chặn đóng phiên khi chưa checkpoint.",
+      "version": "0.3.0",
+      "author": {
+        "name": "TECOTEC MarCom"
+      },
+      "source": "./plugin",
+      "repository": "https://github.com/mkt-tecotec/project-init",
+      "category": "workflow",
+      "tags": ["context", "handoff", "knowledge-base", "outline", "obsidian"]
+    }
+  ]
+}

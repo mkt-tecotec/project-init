@@ -48,7 +48,8 @@ Primary hierarchy:
 
 ## Rules when the brain is unavailable
 
-- Read `CLAUDE.md` (Claude Code) or `AGENTS.md` (other agents) first.
+- Read `AGENTS.md` first. It holds the identity, the brain backend, and the hard rules
+  for every agent. Claude Code reaches it through the `@AGENTS.md` import in `CLAUDE.md`.
 - The canonical brain remains the home for implementation plans and handoffs. Do not
   create standalone plan mirrors in the repo.
 - If you must record something while the brain is down, add a dated note to this file

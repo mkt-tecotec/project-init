@@ -101,14 +101,32 @@ them. Empty placeholder documents are the KDB version of an empty-folder graveya
 - Decisions are append-only. Never edit a past decision. To reverse one, create a new
   decision document and link back to the old one.
 
-## Use the existing templates
+## Use the existing templates, and know that they are not templates yet
 
-Call `list_templates` before inventing a document structure. The KDB already has
-templates for: Tổng quan dự án, Kế hoạch sự kiện, Kế hoạch truyền thông chiến dịch,
+Call `list_templates` before inventing a document structure. **Today it returns an empty
+list.** The 13 drafts in `~Template` were never templatized, so none of them has a
+`templateId`, and `templateManagement` is `admin` on every collection, so an ordinary
+member cannot create real templates either.
+
+That does not mean invent a structure. It means take the second path:
+
+1. `fetch` the matching draft from `~Template` (`f543b651-89f5-4634-9509-72414d20f18a`).
+   The closest one to a project brain is `Tổng quan dự án`,
+   `2eaa6820-9e61-4236-9684-c76e13c8afd6`.
+2. **Strip its leading H1.** `Tổng quan dự án` begins with `# [Tên dự án]`, which Outline
+   forbids because the title is a separate field. Left in, it renders as a duplicated
+   heading.
+3. Pass the remaining body through the `text` parameter of `create_document` and tell
+   the user which draft you reused.
+
+The drafts cover: Tổng quan dự án, Kế hoạch sự kiện, Kế hoạch truyền thông chiến dịch,
 Recap họp, Quyết định, Báo cáo sau chiến dịch, Quy trình / SOP, Outline bài SEO,
-Creative brief cho agency, Tờ trình BLĐ, Dự trù ngân sách, Hồ sơ stakeholder, Kịch
-bản chương trình. Pass the matching `templateId` to `create_document` instead of
-writing a parallel structure.
+Creative brief cho agency, Tờ trình BLĐ, Dự trù ngân sách, Hồ sơ stakeholder, Kịch bản
+chương trình. Note that `Tổng quan dự án` is an overview template only: it has no next
+action, no active plan and no update date, so it does not replace the re-entry page.
+
+If someone templatizes the drafts later, step 1 starts returning `templateId` values and
+the first path applies again. Re-check rather than assuming either state.
 
 ## Writing rules specific to Outline
 

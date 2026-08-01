@@ -1,7 +1,9 @@
 # {{PROJECT_NAME}} - Agent Instructions
 
-This file gives non-Claude agents (Codex and others) the same operating rules as
-`CLAUDE.md`. Read it before touching anything in this project.
+This file is the single source of the project's operating rules. Non-Claude agents
+(Codex and others) read it directly. Claude Code reads it through the `@AGENTS.md`
+import on the first line of `CLAUDE.md`. There is no second copy of these rules
+anywhere, and there must not be one.
 
 ## Project identity
 
@@ -66,7 +68,9 @@ switch is a decision to log, not a preference to drift on.
 Confirm: the requested change was implemented; the appropriate verification was run;
 the brain was updated (or explain why not); paths and repo state are still consistent.
 
-## Keep this file and CLAUDE.md in sync
+## One source for the rules
 
-`CLAUDE.md` holds the same hard rules for Claude Code. When a rule changes there,
-change it here too. The two files must never drift apart on rules.
+The rules above live here and nowhere else. `CLAUDE.md` does not restate them; its first
+line is `@AGENTS.md`, which makes Claude Code load this file at session start. To change
+a rule, change it here. If you ever find the same rule written in both files, delete the
+copy in `CLAUDE.md` rather than trying to keep two versions aligned.

@@ -1,0 +1,37 @@
+{
+  "description": "Nạp điểm tái nhập của bộ não lúc mở phiên và trước khi nén, và chặn đóng phiên khi có việc chưa write-back.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/brain-status.sh\" SessionStart",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/brain-status.sh\" PreCompact",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Dự án này giữ context bền trong một bộ não dự án, khai báo ở khối \"Brain backend\" trong AGENTS.md. Nếu repo hiện tại không có AGENTS.md hoặc không có khối đó, trả về approve ngay, đây không phải dự án dùng convention này.\n\nNgược lại, xét phiên vừa rồi: có hoàn thành một đơn vị công việc nào không (sửa file, ra quyết định, xong một deliverable), và delta đó đã được ghi vào bộ não chưa.\n\nTrả về approve nếu bất kỳ điều nào đúng: không có thay đổi đáng kể; bộ não đã được cập nhật trong phiên này; người dùng đã nói rõ là không cần checkpoint; hoặc hook này đã chặn một lần trong phiên này rồi (stop_hook_active).\n\nNgược lại trả về block, reason: \"Chưa checkpoint. Chạy /project-checkpoint để ghi delta vào bộ não trước khi đóng phiên, hoặc nói rõ là bỏ qua lần này.\""
+          }
+        ]
+      }
+    ]
+  }
+}

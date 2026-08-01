@@ -1,0 +1,9 @@
+{
+  "name": "project-brain",
+  "version": "0.3.0",
+  "description": "Dựng và giữ sống bộ não dự án để phiên AI sau không bị rớt não. Gồm skill project-init, skill project-checkpoint, và hook nạp điểm tái nhập lúc mở phiên.",
+  "author": {
+    "name": "TECOTEC MarCom"
+  },
+  "repository": "https://github.com/mkt-tecotec/project-init"
+}

@@ -4,11 +4,16 @@ Run this every time `project-checkpoint` fires. Skip a line only with a stated r
 
 ## Gather
 
-- [ ] Read the "Brain backend" block in CLAUDE.md: which backend is canonical, and
-      where the project root document or folder is.
+- [ ] Read the "Brain backend" block in AGENTS.md: which backend is canonical, and
+      where the project root document or folder is. (Claude Code reaches it through the
+      `@AGENTS.md` import in CLAUDE.md; on Cowork, open AGENTS.md directly. If the
+      project has no repo at all, ask.)
 - [ ] Confirmed that backend actually responds. If not: fall back to
       `docs/AGENT_BOOTSTRAP.md`, tell the user, and flag the sync debt.
 - [ ] Read the current re-entry state before writing (re-entry page + 00/03).
+- [ ] Read the staleness signal and said it out loud: how long since the brain was
+      updated, by whom, and the `revision` delta since the last checkpoint. Someone
+      else's edit gets read before you append on top of it.
 - [ ] Collected the real delta: for code, `git status` / `git diff --stat` / `git log`;
       for work, the user's outputs, decisions, blockers.
 - [ ] Confirmed there is a material change. If not: record "no material change", stop.
@@ -42,7 +47,10 @@ Run this every time `project-checkpoint` fires. Skip a line only with a stated r
       surfaced for the user, not auto-run.
 - [ ] No parallel versions: repo docs remain pointers, the canonical brain holds
       content.
-- [ ] CLAUDE.md and AGENTS.md still mirror-identical on rules.
+- [ ] Re-entry page still fits one screen; decision log under the split threshold of
+      about 20 entries, or already split into "còn hiệu lực" and "lịch sử".
+- [ ] Hard rules still live only in AGENTS.md; `CLAUDE.md` still just imports it and
+      carries no duplicated rule.
 - [ ] Outline documents have no YAML frontmatter and no leading H1.
 - [ ] Full diacritics; no em dash.
 

@@ -1,0 +1,37 @@
+---
+type: project-index
+tags:
+{{TAGS}}
+status: active
+owner: {{OWNER}}
+working_dir: {{CODE_PATH}}
+updated: {{TODAY}}
+last_synced: {{TODAY}}
+---
+
+# {{PROJECT_NAME}}
+
+> **Trạng thái:** đang chạy | **Owner:** {{OWNER}} | **Cập nhật lần cuối:** {{TODAY}}
+
+Đây là **điểm tái nhập** của dự án {{PROJECT_NAME}}. Bắt đầu ở đây:
+[[00 - Project Overview]]. Mọi phiên làm việc, người hay AI, đọc trang này trước khi bắt
+tay vào việc. Kết thúc phiên thì chạy `/project-checkpoint` để cập nhật lại trang này
+trước khi đóng.
+
+Giữ trang này trong một màn hình. Đây là điểm tái nhập, không phải kho lưu: phần nào dài
+ra thì tách sang note riêng và để lại link.
+
+## Trạng thái hiện tại
+
+- **Tình trạng:** {{OUTCOME}}
+- **Việc tiếp theo:** (một việc quan trọng nhất, không phải danh sách)
+- **Kế hoạch đang chạy:** (link tới plan trong Implementation Plans)
+
+## Tài liệu chính
+
+- [[00 - Project Overview]]
+- [[03 - Implementation Status]]
+
+## Implementation plans
+
+- (các plan có ngày tháng nằm ở đây, đánh dấu cái đang chạy)
