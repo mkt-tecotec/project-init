@@ -16,6 +16,12 @@ tại", "việc tiếp theo" are what make this page findable at all.
 
 > **Trạng thái:** đang chạy | **Owner:** {{OWNER}} | **Cập nhật lần cuối:** {{TODAY}} | **Revision khi checkpoint:** {{REVISION}} | **Thư mục làm việc:** `{{CODE_PATH}}` | **Repo:** {{REPO_URL}}
 
+<!-- Revision khi checkpoint ghi revision của trang này. Nếu trang này chỉ là mục lục
+     còn nội dung thật nằm ở tài liệu con, ghi thêm revision của tài liệu con đang chạy,
+     dạng "3 (trang này) / 17 (kịch bản)". Revision của một trang mục lục gần như đứng
+     yên nên tự nó không nói lên bộ não có cũ hay không. -->
+
+
 Đây là **điểm tái nhập** của dự án {{PROJECT_NAME}}, nguồn chính thức để bắt đầu.
 Mọi phiên làm việc, người hay AI, đọc trang này trước khi bắt tay vào việc. Kết thúc
 phiên thì chạy `/project-checkpoint` để cập nhật lại trang này trước khi đóng.
