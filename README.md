@@ -1,8 +1,9 @@
 # project-init
 
 Bộ skill cho Claude Code / Cowork giúp dự án làm việc với AI không bị rớt não qua các
-phiên. Dẫn xuất từ convention thực chiến của `mkt-tecotec/marcom-workspace`: `AGENTS.md`
-mang các luật cứng, một bộ não duy nhất làm source of truth.
+phiên. Dẫn xuất từ convention thực chiến của `mkt-tecotec/marcom-workspace`, với một thay
+đổi: luật cứng nằm ở đúng một file `AGENTS.md` thay vì hai bản phải giữ giống nhau bằng
+tay. Một bộ não duy nhất làm source of truth.
 
 Repo chứa hai skill bổ trợ nhau:
 

@@ -36,10 +36,15 @@ Bản plugin gồm cả hook, thứ Cowork không có:
 |------|--------|
 | `SessionStart` | Nạp khối Brain backend và điểm tái nhập vào context ngay khi mở phiên |
 | `PreCompact` | Giữ trạng thái và việc tiếp theo qua lần nén context |
-| `Stop` | Chặn đóng phiên khi có việc đã làm mà chưa write-back, và nhắc chạy checkpoint |
+| `Stop` | Nhắc chạy checkpoint khi có việc đã làm mà chưa write-back |
 
 Hook chỉ chạy ở thư mục có `AGENTS.md` chứa khối `## Brain backend`. Ở dự án khác nó im
 lặng hoàn toàn, không làm phiền.
+
+`Stop` được viết theo hướng **mặc định cho đóng phiên**, chỉ giữ lại khi có bằng chứng rõ
+là có việc chưa ghi, và phân vân thì cho qua. Muốn thoát ngay thì nói "bỏ qua checkpoint".
+Chọn như vậy có chủ đích: một cái gate chặn nhầm ở cuối phiên còn khó chịu hơn một lần
+quên checkpoint, và nó sẽ khiến người ta gỡ luôn plugin.
 
 Trong Claude Code, skill của plugin gọi theo dạng `/project-brain:project-init` và
 `/project-brain:project-checkpoint`. Trên Cowork vẫn là `/project-init` và
