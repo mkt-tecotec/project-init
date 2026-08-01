@@ -1,0 +1,37 @@
+TITLE: {{PROJECT_NAME}}
+COLLECTION: {{BRAIN_COLLECTION}}
+PARENT: none (this is the project branch root)
+
+The lines above are instructions for the agent creating this document, not body
+content. Set the title through the `title` field and delete this header block before
+writing. The body starts below and must not begin with an H1.
+
+Two rules for this page specifically. Keep it inside one screen: it is the re-entry
+point, not an archive, so when a section outgrows the page move it to a child document
+and leave a link. And keep the Vietnamese wording of the status block verbatim: the team
+searches the KDB in Vietnamese with diacritics, and "điểm tái nhập", "trạng thái hiện
+tại", "việc tiếp theo" are what make this page findable at all.
+
+---
+
+> **Trạng thái:** đang chạy | **Owner:** {{OWNER}} | **Cập nhật lần cuối:** {{TODAY}} | **Revision khi checkpoint:** {{REVISION}} | **Thư mục làm việc:** `{{CODE_PATH}}` | **Repo:** {{REPO_URL}}
+
+Đây là **điểm tái nhập** của dự án {{PROJECT_NAME}}, nguồn chính thức để bắt đầu.
+Mọi phiên làm việc, người hay AI, đọc trang này trước khi bắt tay vào việc. Kết thúc
+phiên thì chạy `/project-checkpoint` để cập nhật lại trang này trước khi đóng.
+
+## Trạng thái hiện tại
+
+- **Tình trạng:** {{OUTCOME}}
+- **Việc tiếp theo:** (một việc quan trọng nhất, không phải danh sách)
+- **Kế hoạch đang chạy:** (link tới plan trong Implementation Plans)
+
+## Tài liệu chính
+
+- 00 - Project Overview
+- 03 - Implementation Status
+
+## Nguồn liên quan
+
+- Fibery (task, tiến độ, deadline): (link)
+- Ngân sách / tờ trình: nằm ở collection 90 Nội bộ hẹp, không đặt trong nhánh này

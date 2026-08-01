@@ -1,0 +1,38 @@
+@AGENTS.md
+
+# {{PROJECT_NAME}} - Claude Code notes
+
+`AGENTS.md`, imported on the first line above, is the single source of this project's
+identity, brain backend, and hard rules. Claude Code expands that import at the start of
+every session, so the rules are already in context by the time you read this.
+
+Do not copy any rule from `AGENTS.md` into this file. A second copy of the rules is
+exactly the parallel-versions failure this project exists to prevent, and two files that
+must be kept "identical" by hand always drift. Everything below is Claude Code specific
+and has no equivalent for other agents.
+
+## Session ritual
+
+Start of session: read the re-entry page named in `AGENTS.md` before doing real work,
+and say the staleness signal out loud (when the brain was last updated, and by whom).
+
+End of session, or as soon as a unit of work is finished: run `/project-checkpoint`.
+Do not leave the write-back to the next session; that is how the brain goes stale.
+
+## Before you say "done"
+
+1. Confirm the change matches what the user asked for.
+2. Confirm the brain was updated if a unit of work was completed, or state why no
+   update was needed.
+3. Report briefly: what changed, where in the brain it was logged, what to verify.
+
+## Auto memory is off for this project
+
+`.claude/settings.json` sets `"autoMemoryEnabled": false`. Auto memory is on by default
+and would accumulate project notes in `~/.claude/projects/<project>/memory/`, which is
+machine-local and invisible to teammates: a second store of project state that no one
+else can read and that no checkpoint updates. The brain named in `AGENTS.md` is the only
+place project state belongs.
+
+If you catch yourself wanting to save a project fact "for next time", that fact belongs
+in the brain, not in memory.

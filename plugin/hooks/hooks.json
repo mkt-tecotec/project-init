@@ -1,0 +1,37 @@
+{
+  "description": "Nạp điểm tái nhập của bộ não lúc mở phiên và trước khi nén, và nhắc checkpoint khi có việc chưa write-back.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/brain-status.sh\" SessionStart",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/brain-status.sh\" PreCompact",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Dữ liệu hook: $ARGUMENTS\n\nDự án này giữ context bền trong một bộ não dự án, khai báo ở khối \"Brain backend\" trong AGENTS.md. Nhiệm vụ của bạn: quyết định phiên này có được đóng hay chưa.\n\nMặc định là approve. Chỉ block khi có bằng chứng rõ ràng rằng phiên vừa hoàn thành một đơn vị công việc (sửa file, ra quyết định, xong một deliverable) mà chưa ghi lại vào bộ não.\n\nApprove ngay nếu bất kỳ điều nào đúng:\n- Thư mục hiện tại không có AGENTS.md, hoặc có nhưng không có khối \"Brain backend\". Đây không phải dự án dùng convention này.\n- Không có thay đổi đáng kể trong phiên.\n- Trường last_assistant_message cho thấy checkpoint đã chạy, bộ não đã được cập nhật, hoặc đã báo cáo là không có thay đổi đáng kể.\n- Trường last_assistant_message cho thấy người dùng đã nói bỏ qua checkpoint lần này, hoặc bạn đã nhắc ở lần dừng trước và người dùng vẫn muốn dừng.\n- Bạn không đủ căn cứ để khẳng định có việc chưa ghi. Khi phân vân thì approve, đừng giữ người dùng lại.\n\nNếu block, dùng reason: \"Chưa checkpoint. Chạy /project-checkpoint để ghi delta vào bộ não trước khi đóng phiên. Muốn bỏ qua thì nói 'bỏ qua checkpoint'.\""
+          }
+        ]
+      }
+    ]
+  }
+}

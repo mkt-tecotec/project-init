@@ -53,6 +53,37 @@ documentation need. Say plainly that this is the weakest option and why.
    and inside hard rule R1. Once written, the choice is not re-litigated every
    session. Changing it later is a decision to log, not a preference to drift on.
 
+## Staleness signal: read it before trusting the brain
+
+A brain that no longer matches reality misleads worse than an empty one. So every
+session reads the staleness signal before acting on what the brain says. Each backend
+exposes a different one, and none of them needs a shell.
+
+| Backend | Call | Fields to read |
+|---------|------|----------------|
+| Outline | `list_documents(collectionId)` | `updatedAt`, `updatedBy.name`, `revision` |
+| Obsidian | `vault_read` on the re-entry note | `updated` and `last_synced` frontmatter |
+| Repo | `git log -1 --format=%cd` | date of the last real change |
+
+Two traps on Outline:
+
+- `list_collection_documents` returns only `{id, title, url, children}`. It gives you
+  the tree and no timestamp at all. Use `list_documents` when you need staleness.
+- `lastViewedAt` is per-user view state, not an edit signal. Ignore it. `updatedAt` is
+  edit-driven, which is what makes it trustworthy.
+
+`list_documents(collectionId)` returns newest first, so one call answers "what changed
+most recently in this project, and who touched it".
+
+Report the signal in one line before doing context-dependent work, for example: "brain
+updated 18 days ago by Nghiệp Nguyễn, revision at the last checkpoint was 7 and is now
+12". Then say what you will trust and what you will re-verify.
+
+One caveat to state rather than hide: `revision` increments on any edit, including
+someone else fixing a typo. A nonzero delta means something changed, not that real work
+happened. The judgement still belongs to the checkpoint rule "no material change, say so
+and stop".
+
 ## When two backends are in play
 
 Exactly one is canonical. The other is a derived working layer, the sync direction is

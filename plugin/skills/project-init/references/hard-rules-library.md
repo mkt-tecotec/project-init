@@ -154,15 +154,23 @@ instead. The knowledge base carries purpose, decisions, gotchas, and documents w
 long-term value.
 ```
 
-## R11 - Decisions are append-only
+## R11 - Decisions are append-only, and the brain stays readable
 
 **Why:** an overwritten decision destroys the reason trail, and the next session
-re-litigates a question that was already settled.
+re-litigates a question that was already settled. But append-only with no size limit
+ends in a re-entry page nobody reads, which fails the same way for the opposite reason.
+Both halves belong in one rule so neither is applied without the other.
 
 ```md
-## Hard rule: decisions are append-only
+## Hard rule: decisions are append-only, and the brain stays readable
 
 Never edit or delete a recorded decision. To reverse one, add a new dated decision that
 states what it supersedes and why, and link back to the original. Decision documents
 are named `Quyết định: <việc> (YYYY-MM-DD)`.
+
+Keep the brain bounded as it grows. The re-entry page stays inside one screen: status,
+the single next action, the active plan, and links out. When the decision log passes
+about 20 entries, move it into its own document, split into "còn hiệu lực" and "lịch
+sử", and leave a link behind. Do the same for gotchas when they outgrow their section.
+Moving content into a linked document is not deleting it; overwriting it is.
 ```

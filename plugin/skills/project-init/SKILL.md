@@ -14,6 +14,11 @@ description: >-
 
 # project-init
 
+**Version 0.3.0.** Say this version number in your first line of output when the skill
+runs. Claude Code installs update themselves; a Cowork install does not, so the number is
+the only way a user finds out they are running a stale copy. Newest release:
+https://github.com/mkt-tecotec/project-init/releases
+
 Bootstrap the durable context ("brain") for a new project so any future AI session
 picks up exactly where the last one left off, instead of drifting or contradicting
 past decisions ("rớt não").
@@ -60,8 +65,10 @@ placeholder documents; neither prevents rớt não and both are explicitly disco
   decides who can read it. Decide the zone before creating anything.
 - **Minimum viable scaffold.** No empty-folder graveyards, no placeholder documents.
   Create only what will actually be maintained.
-- **Cross-agent parity.** CLAUDE.md and AGENTS.md carry the SAME hard rules, phrased
-  for Claude Code and for generic agents. They must stay in sync.
+- **One source for the rules.** `AGENTS.md` carries the hard rules. `CLAUDE.md` imports
+  it with `@AGENTS.md` on its first line and adds only Claude Code specifics. Two files
+  holding the same rules is the parallel-versions failure in miniature, so do not make
+  one and then promise to keep them in sync.
 - **Idempotent.** Detect existing artifacts; never clobber; offer to update instead.
 - **One re-entry point.** Every project gets a "start here" so a cold session knows
   its current state and next action.
@@ -75,6 +82,10 @@ placeholder documents; neither prevents rớt não and both are explicitly disco
    **update mode**: read them, summarize the current state back to the user, and ask
    what to change. Do not overwrite a maintained brain.
 3. Load the user's global conventions if available.
+4. In update mode, read the staleness signal before trusting anything the brain says
+   (see "Staleness signal" in `references/brain-backends.md`) and report it in one line.
+   A brain that is weeks behind reality is a finding to surface, not a detail to skip
+   past. Never summarize a stale brain back to the user as if it were current.
 
 ## Phase 0.5 - Detect the backend, then ask which is canonical
 
@@ -130,23 +141,43 @@ the user can confirm fast rather than answer everything from scratch.
 Choose the tier from the project type. Do not create irrelevant directories. Skip this
 phase entirely for a pure knowledge-base project with no local folder.
 
-- **Code project.** `CLAUDE.md`, `AGENTS.md`, `README.md`, `docs/AGENT_BOOTSTRAP.md`,
-  `.env.example`, `.gitignore`, and `CHANGELOG.md` (only if Git). Add stack-specific
-  folders only when the chosen stack needs them; never invent technologies.
+- **Code project.** `AGENTS.md`, `CLAUDE.md`, `README.md`, `docs/AGENT_BOOTSTRAP.md`,
+  `.claude/settings.json`, `.env.example`, `.gitignore`, and `CHANGELOG.md` (only if
+  Git). Add stack-specific folders only when the chosen stack needs them; never invent
+  technologies.
 - **Marketing / work project.** `CLAUDE.md` (or a single `AGENTS.md`), `README.md`,
   and only the working folders the project will actually fill: `brief/`, `references/`,
   `drafts/`, `assets/`, `deliverables/`. Skip any folder that would sit empty.
 
-Fill `CLAUDE.md` and `AGENTS.md` from `templates/`, injecting the selected hard rules
-**verbatim into both**, plus the Brain backend block from Phase 0.5. The two files must
-be mirror-identical in their rule set.
+Fill `AGENTS.md` from `templates/AGENTS.md.template`, injecting the selected hard rules
+verbatim plus the Brain backend block from Phase 0.5. Then write `CLAUDE.md` from
+`templates/CLAUDE.md.template`: its first line is `@AGENTS.md` and it holds only Claude
+Code specifics. **Do not inject the rules a second time.** Also write
+`.claude/settings.json` from `templates/settings.json.template`, which turns off auto
+memory so Claude Code does not accumulate a second, machine-local store of project state.
+
+`CLAUDE.md` and `.claude/settings.json` are Claude Code mechanisms. A project worked on
+from Cowork has neither; there, `AGENTS.md` is simply the rules file a person opens and
+reads. Write it either way, and do not tell a Cowork user to configure something that
+does not exist on their surface.
 
 ## Phase 3 - Scaffold the brain (source of truth)
 
 ### If the backend is the Outline KDB
 
-Call `list_templates` first and reuse an existing template rather than inventing a
-structure. Create the branch in the collection chosen in Q2:
+Reuse an existing template rather than inventing a structure, but handle both cases:
+
+1. Call `list_templates`. If it returns a real template, pass its `templateId` to
+   `create_document`.
+2. **If it returns an empty list, that is the normal case today.** The KDB's `~Template`
+   collection holds drafts that were never templatized, so they have no `templateId`.
+   `fetch` the matching draft, pass its body through the `text` parameter, and **strip
+   the leading H1 first**: `Tổng quan dự án` starts with `# [Tên dự án]`, which Outline
+   forbids because the title is a separate field. Say which draft you reused.
+
+Do not let an empty `list_templates` silently turn into inventing a new structure.
+
+Create the branch in the collection chosen in Q2:
 
 ```text
 <Tên dự án>                       parent document, the re-entry point
@@ -172,9 +203,21 @@ subfolder.
 
 ### Either way
 
-Set the re-entry "Start here" line, the current status, the single next action, and an
-active-plan marker. Formatting for all generated Vietnamese content: full diacritics,
-and never the em dash character.
+The re-entry page carries one standard status block, taken verbatim from
+`templates/kdb-README.md.template` or `templates/vault-README.md.template`: Trạng thái,
+Owner, Cập nhật lần cuối, Revision khi checkpoint (Outline only), then Tình trạng, Việc
+tiếp theo as a single item, and Kế hoạch đang chạy. Do not invent a second layout: one
+project in the KDB today uses an inline line and another a markdown table for the same
+thing, and that divergence is what a cold session has to guess at.
+
+Keep the Vietnamese wording of that block. The team searches in Vietnamese with
+diacritics, and the phrases "điểm tái nhập", "trạng thái hiện tại" and "việc tiếp theo"
+in the body are what make the page findable. An English-only re-entry page is invisible
+to the people who need it.
+
+Keep the re-entry page inside one screen and carry the closing ritual line: end of
+session, run `/project-checkpoint` before closing. Formatting for all generated
+Vietnamese content: full diacritics, and never the em dash character.
 
 ## Phase 4 - Wire the re-entry and write-back loop
 
@@ -190,7 +233,14 @@ and never the em dash character.
 ## Phase 5 - Guardrails check before finishing bootstrap
 
 - No parallel versions: repo docs are pointers, the canonical brain holds the content.
-- CLAUDE.md and AGENTS.md rule sets are identical.
+- The hard rules exist in exactly one file. `AGENTS.md` holds them; `CLAUDE.md` imports
+  it with `@AGENTS.md`. There is no second copy to drift.
+- The re-entry page contains the Vietnamese phrases "điểm tái nhập", "trạng thái hiện
+  tại" and "việc tiếp theo", and fits in one screen. Verify it by searching the brain for
+  **"điểm tái nhập"** and confirming the page comes back. Use that exact phrase, not a
+  longer sentence: Outline search is token-based, so a multi-word query matches each word
+  separately and buries the page under noise. The distinctive phrase is the reliable
+  handle.
 - Every document was created in the collection or folder the user confirmed in Q5.
   Nothing sensitive landed in a team-wide collection. No share link was enabled outside
   the designated external-sharing collection.
@@ -210,13 +260,33 @@ active on the re-entry page, then run the planning conversation (goal, phases,
 dependencies, risks, verification). The plan lives in the brain, never as a standalone
 plan file in the repo.
 
+## Phase 7 - Cold-start test before declaring the brain done
+
+Everything checked so far is form: frontmatter, diacritics, which collection a document
+landed in. None of it proves the brain works. Run one test that does.
+
+Open a fresh session that knows nothing about this conversation. Give it exactly one
+thing, the re-entry page. Then ask: **"việc tiếp theo là gì, và tại sao lại là nó?"**
+
+- Specific answer that matches reality: the brain passes.
+- Vague answer, wrong answer, or an answer that has to guess: the brain failed, no
+  matter how many checklist lines are green. Fix the re-entry page and test again.
+
+The failures this catches, in order of how often they happen: a next action written as a
+category instead of a step ("tiếp tục làm nội dung"), a status paragraph that describes
+the plan rather than the current state, and a re-entry page that quietly assumes context
+only the current session has.
+
+Report the result in one line. This is the acceptance criterion for the bootstrap. Do
+not tell the user the brain is done without running it.
+
 ## Placeholder convention
 
 Templates use `{{DOUBLE_BRACE}}` placeholders. Replace every one before writing:
 `{{PROJECT_NAME}}`, `{{ONE_LINER}}`, `{{PROJECT_TYPE}}`, `{{WHY}}`, `{{OUTCOME}}`,
 `{{CODE_PATH}}`, `{{REPO_URL}}`, `{{BRANCH_MODEL}}`, `{{HIERARCHY}}`,
-`{{BRAIN_NAME}}`, `{{BRAIN_ROOT}}`, `{{BRAIN_READ_TOOL}}`,
-`{{SECONDARY_BRAIN_CLAUSE}}`, `{{OPS_SYSTEM}}`, `{{HARD_RULES}}`,
+`{{BRAIN_NAME}}`, `{{BRAIN_ROOT}}`, `{{BRAIN_READ_TOOL}}`, `{{BRAIN_COLLECTION}}`,
+`{{REVISION}}`, `{{SECONDARY_BRAIN_CLAUSE}}`, `{{OPS_SYSTEM}}`, `{{HARD_RULES}}`,
 `{{OPERATIONAL_DEFAULTS}}`, `{{OWNER}}`, `{{TODAY}}`, `{{STAKEHOLDERS}}`,
 `{{PLAYBOOK}}`, `{{TAGS}}`.
 
@@ -227,8 +297,12 @@ Templates use `{{DOUBLE_BRACE}}` placeholders. Replace every one before writing:
 - `references/tecotec-kdb.md` - the TECOTEC KDB preset: collection map, permission
   zones, routing, naming. Another department swaps this one file.
 - `references/hard-rules-library.md` - the menu of reusable hard rules.
-- `templates/CLAUDE.md.template` - Claude Code project instructions.
-- `templates/AGENTS.md.template` - mirror for generic agents.
+- `templates/AGENTS.md.template` - the single source of identity, brain backend, and
+  hard rules. Every agent reads this one.
+- `templates/CLAUDE.md.template` - `@AGENTS.md` plus Claude Code specifics only. Never a
+  second copy of the rules.
+- `templates/settings.json.template` - project `.claude/settings.json`, turns off auto
+  memory so it cannot become a second store of project state.
 - `templates/AGENT_BOOTSTRAP.md.template` - portable repo-only fallback.
 - `templates/kdb-*.template` - Outline documents (no frontmatter, no leading H1).
 - `templates/vault-*.template` - Obsidian notes (frontmatter, wikilinks).
