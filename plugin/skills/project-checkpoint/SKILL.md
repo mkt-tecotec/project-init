@@ -73,7 +73,9 @@ Then read the staleness signal for this backend before writing anything, followi
 `list_documents(collectionId)` for `updatedAt`, `updatedBy.name` and `revision`; on
 Obsidian the `updated` and `last_synced` frontmatter; in a repo `git log -1`. Compare
 `revision` against the value recorded in the status block at the last checkpoint and say
-the delta out loud. If someone else edited the brain since then, read their change
+the delta out loud. Read the whole branch, not only the re-entry page: a re-entry page
+that is a thin index barely changes while the documents under it move constantly, so its
+revision alone will tell you the brain is fresh when it is not. If someone else edited the brain since then, read their change
 before appending, so you do not quietly overwrite a decision you never saw.
 
 ## Phase 1 - Gather the delta

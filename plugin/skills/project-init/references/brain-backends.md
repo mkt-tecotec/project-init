@@ -79,10 +79,20 @@ Report the signal in one line before doing context-dependent work, for example: 
 updated 18 days ago by Nghiệp Nguyễn, revision at the last checkpoint was 7 and is now
 12". Then say what you will trust and what you will re-verify.
 
-One caveat to state rather than hide: `revision` increments on any edit, including
-someone else fixing a typo. A nonzero delta means something changed, not that real work
-happened. The judgement still belongs to the checkpoint rule "no material change, say so
-and stop".
+Two caveats to state rather than hide.
+
+`revision` increments on any edit, including someone else fixing a typo. A nonzero delta
+means something changed, not that real work happened. The judgement still belongs to the
+checkpoint rule "no material change, say so and stop".
+
+**A stub re-entry page has a useless revision.** In a real branch found during rollout,
+the root document was an empty shell holding only children: its `revision` sat at 3 while
+the child carrying all the work had reached 17. Reading the root alone would report a
+brain that had not moved in a week, when in fact it had changed eleven times. So read the
+whole branch, not just the re-entry page: `list_documents(collectionId)` returns
+newest-first across the collection, and `breadcrumb` tells you which branch each hit
+belongs to. Take the newest `updatedAt` anywhere under the branch as the branch's real
+staleness, and say which document it came from.
 
 ## When two backends are in play
 
