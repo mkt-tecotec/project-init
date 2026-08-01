@@ -54,6 +54,16 @@ Do not run on a project that already has a maintained brain (switch to update mo
 see Phase 0). Do not use it to generate a decorative folder tree or a set of empty
 placeholder documents; neither prevents rớt não and both are explicitly discouraged.
 
+**Do not retrofit existing project branches into this shape as a batch.** Attempting
+exactly that during rollout was stopped by the person who owns the projects, with the
+reason: they are different projects and each already works its own way. A campaign that
+has shipped, an internal programme waiting on a budget decision, and a video in review
+do not share a state model, and forcing one status block onto all of them produces a
+tidy-looking page that describes none of them accurately. Run this skill when a project
+starts, or when someone with real knowledge of a specific project asks for it and can
+supply the actual current state. Offering to "standardise the whole collection" is the
+decorative-folder-tree mistake wearing a different hat.
+
 ## Core principles (non-negotiable)
 
 - **One canonical brain, chosen deliberately.** The backend is a per-project decision
